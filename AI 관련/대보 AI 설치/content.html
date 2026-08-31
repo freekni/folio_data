@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>대보 AI 설치</title>
+<style>body{max-width:820px;margin:48px auto;padding:0 28px;color:#252820;font:16px/1.8 "Malgun Gothic",sans-serif}img{max-width:100%}table{border-collapse:collapse}td,th{border:1px solid #ccc;padding:6px}</style>
+</head>
+<body><div>daebonew 개발환경 세팅 안내</div><div>============================</div><div><br></div><div>이 압축본은 Claude Code 용 설정과 세팅 도구입니다.</div><div>프로젝트 소스가 아니므로 SVN 커밋 대상이 아닙니다 (전부 svn:ignore 처리).</div><div><br></div><div><br></div><div>1. 압축 해제 위치</div><div>&nbsp; &nbsp;daebonew 체크아웃 폴더의 **루트**에 풉니다.</div><div><br></div><div>&nbsp; &nbsp; C:\GCERP\workspace\daebo\daebonew\</div><div>&nbsp; &nbsp; &nbsp; ├─ build.gradle&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ← 이 파일이 있는 곳</div><div>&nbsp; &nbsp; &nbsp; ├─ src\</div><div>&nbsp; &nbsp; &nbsp; ├─ CLAUDE.md&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;← 압축본에서 나온 것</div><div>&nbsp; &nbsp; &nbsp; └─ .claude\&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ← 압축본에서 나온 것</div><div><br></div><div>경로는 달라도 됩니다. build.gradle 이 있는 폴더면 맞습니다.</div><div><br></div><div><br></div><div>2. 설치</div><div>&nbsp; - VS Code&nbsp; &nbsp; &nbsp; &nbsp; https://code.visualstudio.com/</div><div>&nbsp; - Claude Code&nbsp; &nbsp; VS Code 확장 검색 "Claude Code" 또는 사내 안내 참조</div><div><br></div><div><br></div><div>3. 나머지는 Claude 에게 맡깁니다</div><div>&nbsp; &nbsp; VS Code 로 daebonew 폴더를 열고 Claude Code 에서 이렇게 말하면 됩니다.</div><div><br></div><div>&nbsp; &nbsp; 개발환경 세팅해줘</div><div><br></div><div>&nbsp; &nbsp;Claude 가 하는 일:</div><div>&nbsp; - 무엇이 빠졌는지 점검</div><div>&nbsp; - 자동 처리 가능한 것 처리 (필요 디렉터리, 실행설정, 화면 산출물 생성)</div><div>&nbsp; - 남은 것은 명령어까지 적어서 안내</div><div>&nbsp; - 다시 점검해서 결과 보고</div><div><br></div><div>&nbsp; &nbsp;Claude 가 **하지 않는** 일: 프로그램 설치.</div><div>&nbsp; &nbsp;사내 표준 배포본이 있을 수 있어 안내만 하고 설치는 직접 하시게 되어 있습니다.</div><div><br></div><div><br></div><div>4. 직접 해야 하는 것 3가지</div><div>--------------------------</div><div>&nbsp; &nbsp;Claude 가 끝까지 못 하는 부분입니다. 미리 알아두세요.</div><div><br></div><div>&nbsp; (1) Nexacro Studio 17.1 설치 + 라이선스 등록</div><div>&nbsp; &nbsp; &nbsp; 공개 다운로드가 없는 사내 배포본입니다. 사내 담당자에게 요청하세요.</div><div>&nbsp; &nbsp; &nbsp; 없으면 서버는 뜨지만 브라우저에 화면이 안 나옵니다.</div><div>&nbsp; &nbsp; &nbsp; 백엔드만 보실 거면 건너뛰어도 됩니다.</div><div><br></div><div>&nbsp; (2) VS Code 에서 Ctrl+Shift+P → "Java: Reload Projects"</div><div>&nbsp; &nbsp; &nbsp; Claude 는 VS Code UI 를 조작할 수 없습니다.</div><div>&nbsp; &nbsp; &nbsp; 이걸 안 하면 package ... does not exist 류 오류가 남습니다.</div><div><br></div><div>&nbsp; (3) SVN 자격증명</div><div>&nbsp; &nbsp; &nbsp; 본인 계정입니다. 체크아웃/업데이트 전에 로그인해두세요.</div><div><br></div><div><br></div><div>5. 절대 커밋하지 마세요</div><div>-----------------------</div><div>&nbsp; &nbsp; .classpath</div><div>&nbsp; &nbsp; .project</div><div>&nbsp; &nbsp; .settings\</div><div><br></div><div>&nbsp; &nbsp;STS(Eclipse) 와 VS Code 가 이 파일들을 번갈아 덮어쓰는데, 안에</div><div>&nbsp; &nbsp;Windows 사용자명과 VS Code 확장 버전번호가 박힌 절대경로가 들어갑니다.</div><div><br></div><div>&nbsp; &nbsp; arguments=--init-script C:\Users\&lt;사용자명&gt;\AppData\Roaming\Code\User\</div><div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; globalStorage\redhat.java\1.55.0\...\init.gradle</div><div><br></div><div>&nbsp; &nbsp;커밋하면 다른 사람 전원의 Gradle 동기화가 깨집니다.</div><div><br></div><div><br></div><div>6. 더 자세한 내용</div><div>-----------------</div><div>&nbsp; .claude\project\daebonew\dev-setup-guide.md&nbsp; &nbsp;전체 세팅 절차</div><div>&nbsp; .claude\INDEX.md&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 들어있는 파일 목록과 용도</div><div><br></div><div>&nbsp; 수동으로 점검만 돌려보려면:</div><div><br></div><div>&nbsp; &nbsp; .claude\project\daebonew\tools\Test-DevEnv.ps1</div><div><br></div><div>압축본을 daebonew 폴더 밖에 푼 경우:</div><div><br></div><div>&nbsp; &nbsp; .claude\project\daebonew\tools\Test-DevEnv.ps1 -RepoRoot C:\경로\daebonew</div><div><br></div><div><br></div><div>이 파일은 읽고 지우셔도 됩니다.</div><div><br></div>
+
+
+
+
+
+
+
+
+
+</body>
+</html>
