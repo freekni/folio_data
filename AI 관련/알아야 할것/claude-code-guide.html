@@ -1,0 +1,778 @@
+<title>Claude Code 필수 용어와 습관</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap">
+<style>
+:root{
+  --ground:#f4f7f7;
+  --surface:#ffffff;
+  --surface-2:#e9efef;
+  --ink:#101718;
+  --ink-2:#3b4a4c;
+  --muted:#68787a;
+  --line:#d9e1e1;
+  --line-soft:#e7eded;
+  --accent:#0d6a65;
+  --accent-ink:#0a4f4b;
+  --accent-soft:#d5eae8;
+  --warn:#95500f;
+  --warn-soft:#f6e7d7;
+  --shadow:0 1px 2px rgba(16,23,24,.05), 0 8px 24px -16px rgba(16,23,24,.25);
+  --sans:"IBM Plex Sans KR", "Malgun Gothic", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", "D2Coding", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0d1213;
+    --surface:#141b1c;
+    --surface-2:#1a2325;
+    --ink:#e7eeee;
+    --ink-2:#c0cccd;
+    --muted:#8b9a9c;
+    --line:#26312f;
+    --line-soft:#1e2727;
+    --accent:#55c4bb;
+    --accent-ink:#8ad9d2;
+    --accent-soft:#123330;
+    --warn:#dfa06b;
+    --warn-soft:#2e2318;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0d1213;
+  --surface:#141b1c;
+  --surface-2:#1a2325;
+  --ink:#e7eeee;
+  --ink-2:#c0cccd;
+  --muted:#8b9a9c;
+  --line:#26312f;
+  --line-soft:#1e2727;
+  --accent:#55c4bb;
+  --accent-ink:#8ad9d2;
+  --accent-soft:#123330;
+  --warn:#dfa06b;
+  --warn-soft:#2e2318;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-weight:400;
+  line-height:1.72;
+  font-size:15.5px;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+
+/* ---------- masthead ---------- */
+header.top{
+  border-bottom:1px solid var(--line);
+  background:var(--surface);
+}
+.masthead{padding:56px 0 44px;display:flex;flex-direction:column;gap:18px}
+.eyebrow{
+  font-family:var(--mono);font-size:11.5px;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+}
+h1{
+  margin:0;font-size:clamp(30px,4.4vw,44px);font-weight:700;
+  letter-spacing:-.022em;line-height:1.18;text-wrap:balance;
+}
+.standfirst{
+  margin:0;max-width:64ch;font-size:17px;font-weight:300;
+  color:var(--ink-2);line-height:1.68;
+}
+.meta{
+  display:flex;flex-wrap:wrap;gap:8px 20px;
+  font-family:var(--mono);font-size:12px;color:var(--muted);
+  padding-top:6px;border-top:1px solid var(--line-soft);margin-top:6px;
+}
+
+/* ---------- shell ---------- */
+.shell{display:grid;grid-template-columns:1fr;gap:0;padding:44px 0 88px}
+@media (min-width:980px){
+  .shell{grid-template-columns:212px 1fr;gap:56px}
+}
+nav.toc{display:none}
+@media (min-width:980px){
+  nav.toc{
+    display:block;position:sticky;top:28px;align-self:start;
+    max-height:calc(100vh - 56px);overflow-y:auto;
+  }
+}
+nav.toc ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1px}
+nav.toc a{
+  display:flex;gap:10px;padding:6px 10px;border-radius:5px;
+  color:var(--muted);text-decoration:none;font-size:13.5px;line-height:1.45;
+  border-left:2px solid transparent;
+}
+nav.toc a:hover{color:var(--ink);background:var(--surface-2)}
+nav.toc a:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+nav.toc .n{font-family:var(--mono);font-size:11px;color:var(--accent);padding-top:2px}
+
+main{min-width:0;max-width:74ch}
+section{margin:0 0 60px}
+section:last-child{margin-bottom:0}
+h2{
+  margin:0 0 6px;font-size:23px;font-weight:600;letter-spacing:-.015em;
+  line-height:1.3;text-wrap:balance;scroll-margin-top:24px;
+}
+.sec-head{
+  display:flex;align-items:baseline;gap:12px;
+  padding-bottom:14px;margin-bottom:22px;border-bottom:1px solid var(--line);
+}
+.sec-head .n{
+  font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent);
+  flex:none;padding-top:2px;
+}
+h3{margin:30px 0 8px;font-size:16.5px;font-weight:600;letter-spacing:-.01em}
+.en-inline{
+  font-family:var(--mono);font-size:11.5px;font-weight:400;
+  color:var(--muted);letter-spacing:.03em;margin-left:5px;
+}
+p{margin:0 0 14px;max-width:66ch}
+p:last-child{margin-bottom:0}
+strong{font-weight:600}
+a{color:var(--accent-ink);text-decoration-thickness:1px;text-underline-offset:2px}
+
+code{
+  font-family:var(--mono);font-size:.875em;
+  background:var(--surface-2);color:var(--ink);
+  padding:.12em .38em;border-radius:4px;
+  border:1px solid var(--line-soft);
+}
+pre{
+  margin:0 0 16px;background:var(--surface);border:1px solid var(--line);
+  border-radius:8px;padding:14px 16px;overflow-x:auto;box-shadow:var(--shadow);
+}
+pre code{background:none;border:none;padding:0;font-size:13px;line-height:1.7}
+
+/* ---------- glossary ---------- */
+.terms{display:flex;flex-direction:column;gap:2px}
+.term{
+  display:grid;grid-template-columns:1fr;gap:4px;
+  padding:16px 0;border-bottom:1px solid var(--line-soft);
+}
+.term:last-child{border-bottom:none}
+@media (min-width:640px){
+  .term{grid-template-columns:180px 1fr;gap:8px 24px;align-items:start}
+}
+.term dt{display:flex;flex-direction:column;gap:3px}
+.term .ko{font-weight:600;font-size:15.5px;letter-spacing:-.01em}
+.term .en{font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.02em}
+.term dd{margin:0;color:var(--ink-2)}
+.term dd p{margin-bottom:8px}
+.term dd .why{
+  display:block;margin-top:8px;padding-left:11px;
+  border-left:2px solid var(--accent-soft);
+  font-size:13.5px;color:var(--muted);
+}
+.term dd .why b{color:var(--accent-ink);font-weight:600}
+
+/* ---------- context meter ---------- */
+figure.meter{
+  margin:0 0 22px;padding:20px;background:var(--surface);
+  border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);
+}
+.bar{
+  display:flex;height:34px;border-radius:6px;overflow:hidden;
+  border:1px solid var(--line);background:var(--surface-2);
+}
+.bar span{
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:10.5px;font-weight:600;
+  letter-spacing:.02em;white-space:nowrap;overflow:hidden;
+}
+.seg-fixed{background:var(--accent);color:#fff;flex:0 0 22%}
+:root[data-theme="dark"] .seg-fixed{color:#08211f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .seg-fixed{color:#08211f}}
+.seg-talk{background:var(--accent-soft);color:var(--accent-ink);flex:1 1 auto}
+.seg-free{background:transparent;color:var(--muted);flex:0 0 18%;border-left:1px dashed var(--line)}
+figure.meter figcaption{
+  margin-top:12px;font-size:13.5px;color:var(--muted);line-height:1.6;
+}
+.meter-row{display:flex;flex-direction:column;gap:6px}
+.meter-row + .meter-row{margin-top:16px}
+.meter-label{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+
+/* ---------- tables ---------- */
+.tw{overflow-x:auto;margin:0 0 16px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:460px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+thead th{
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);background:var(--surface-2);
+  border-bottom:1px solid var(--line);
+}
+tbody tr:last-child td{border-bottom:none}
+td code{font-size:12.5px}
+.cmd{white-space:nowrap}
+
+/* ---------- habit cards ---------- */
+.habits{display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:700px){.habits{grid-template-columns:1fr 1fr}}
+.habit{
+  background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:18px 18px 16px;display:flex;flex-direction:column;gap:8px;
+  box-shadow:var(--shadow);
+}
+.habit .tag{
+  align-self:flex-start;font-family:var(--mono);font-size:10.5px;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink);
+  background:var(--accent-soft);padding:3px 8px;border-radius:4px;
+}
+.habit h3{margin:0;font-size:15.5px;line-height:1.45}
+.habit p{margin:0;font-size:14px;color:var(--ink-2)}
+
+/* ---------- callout ---------- */
+.callout{
+  background:var(--warn-soft);border:1px solid var(--warn);border-radius:10px;
+  padding:18px 20px;margin:0 0 18px;
+}
+.callout .hd{
+  display:flex;align-items:center;gap:9px;margin-bottom:10px;
+  font-weight:600;font-size:14.5px;color:var(--warn);
+}
+.callout .hd .mk{
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;border:1px solid var(--warn);border-radius:4px;padding:1px 6px;
+}
+.callout ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:9px}
+.callout li{color:var(--ink-2);font-size:14.5px}
+.callout li b{color:var(--ink);font-weight:600}
+
+.note{
+  border-left:3px solid var(--accent);padding:2px 0 2px 15px;
+  margin:0 0 16px;color:var(--muted);font-size:14px;
+}
+.note b{color:var(--ink-2);font-weight:600}
+
+ul.plain{margin:0 0 14px;padding-left:19px;display:flex;flex-direction:column;gap:7px}
+ul.plain li{color:var(--ink-2)}
+ul.plain li b{color:var(--ink);font-weight:600}
+
+footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);font-size:13px}
+footer p{max-width:70ch}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- print / PDF ----------
+   다크 미디어쿼리보다 뒤에 와야 인쇄 시 밝은 팔레트가 이깁니다. */
+@page{size:A4;margin:15mm 14mm 16mm}
+@media print{
+  :root, :root[data-theme="dark"]{
+    --ground:#ffffff;
+    --surface:#ffffff;
+    --surface-2:#f1f5f5;
+    --ink:#101718;
+    --ink-2:#2f3c3e;
+    --muted:#5b6b6d;
+    --line:#c9d4d4;
+    --line-soft:#e2e9e9;
+    --accent:#0a5450;
+    --accent-ink:#083f3c;
+    --accent-soft:#dcedeb;
+    --warn:#7d430c;
+    --warn-soft:#f8eee2;
+    --shadow:none;
+  }
+  body{font-size:10.5pt;line-height:1.6}
+  .wrap{max-width:none;padding:0}
+  nav.toc{display:none !important}
+  .shell{display:block;padding:0}
+  main{max-width:none}
+  header.top{border-bottom:1.5pt solid var(--accent);background:none}
+  .masthead{padding:0 0 14pt;gap:9pt}
+  h1{font-size:22pt}
+  .standfirst{font-size:11pt;max-width:none}
+  .meta{font-size:8.5pt}
+
+  section{margin:0 0 20pt;break-inside:auto}
+  .sec-head{break-after:avoid;margin-bottom:12pt;padding-bottom:7pt}
+  h2{font-size:14pt}
+  h3{font-size:11.5pt;margin:16pt 0 5pt;break-after:avoid}
+  p{max-width:none}
+
+  /* 한 덩어리로 읽혀야 하는 것은 쪼개지 않는다 */
+  .habit, .callout, figure.meter, .term, .tw, pre, .note{break-inside:avoid}
+  thead{display:table-header-group}
+  tr{break-inside:avoid}
+
+  .habits{grid-template-columns:1fr 1fr;gap:9pt}
+  .habit{padding:10pt 11pt;box-shadow:none;border-color:var(--line)}
+  .tw{box-shadow:none}
+  table{font-size:9.5pt;min-width:0}
+  th,td{padding:5pt 8pt}
+  figure.meter{box-shadow:none;padding:12pt}
+  .bar{height:24pt}
+
+  /* 종이에서는 클릭이 안 되므로 외부 링크 주소를 펼친다 */
+  a[href^="http"]::after{
+    content:" (" attr(href) ")";
+    font-family:var(--mono);font-size:8pt;color:var(--muted);word-break:break-all;
+  }
+  nav.toc a::after{content:none}
+
+  section#terms, section#project, section#windows{break-before:page}
+  footer{border-top:1pt solid var(--line);padding:12pt 0 0;font-size:9pt}
+}
+</style>
+
+<header class="top">
+  <div class="wrap masthead">
+    <div class="eyebrow">GCERP · daebonew</div>
+    <h1>Claude Code 필수 용어와 습관</h1>
+    <p class="standfirst">
+      처음 쓰는 사람이 가장 먼저 헷갈리는 것들을 모았습니다. 개념 한 가지(컨텍스트)만
+      이해하면 나머지는 그 위에 얹힙니다. 뒤쪽에는 daebonew 프로젝트에만 있는 설정과
+      Windows 환경에서 실제로 겪은 함정을 정리했습니다.
+    </p>
+    <div class="meta">
+      <span>대상 · daebonew 개발자</span>
+      <span>환경 · Windows 11 + VS Code</span>
+      <span>2026-09-01</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap shell">
+  <nav class="toc" aria-label="목차">
+    <ol>
+      <li><a href="#context"><span class="n">01</span>컨텍스트</a></li>
+      <li><a href="#terms"><span class="n">02</span>용어</a></li>
+      <li><a href="#commands"><span class="n">03</span>명령</a></li>
+      <li><a href="#models"><span class="n">04</span>모델</a></li>
+      <li><a href="#habits"><span class="n">05</span>습관</a></li>
+      <li><a href="#cannot"><span class="n">06</span>못 하는 것</a></li>
+      <li><a href="#project"><span class="n">07</span>이 프로젝트</a></li>
+      <li><a href="#windows"><span class="n">08</span>Windows 함정</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <!-- 01 -->
+    <section id="context">
+      <div class="sec-head"><span class="n">01</span><h2>먼저 이것 하나 — 컨텍스트</h2></div>
+
+      <p>
+        Claude 는 <strong>정해진 크기의 작업 기억</strong>을 갖고 대화합니다. 이걸 컨텍스트라고 합니다.
+        읽은 파일, 실행한 명령의 출력, 주고받은 말이 전부 여기에 쌓입니다.
+      </p>
+
+      <figure class="meter">
+        <div class="meter-row">
+          <div class="meter-label">작업 초반</div>
+          <div class="bar">
+            <span class="seg-fixed" style="flex-basis:22%">고정 · 규칙+도구</span>
+            <span class="seg-talk" style="flex-basis:30%">대화</span>
+            <span class="seg-free">여유</span>
+          </div>
+        </div>
+        <div class="meter-row">
+          <div class="meter-label">파일 여러 개를 읽은 뒤</div>
+          <div class="bar">
+            <span class="seg-fixed" style="flex-basis:22%">고정</span>
+            <span class="seg-talk">대화 + 읽은 파일 전문</span>
+            <span class="seg-free" style="flex-basis:4%"></span>
+          </div>
+        </div>
+        <figcaption>
+          왼쪽 고정 구간은 <code>CLAUDE.md</code> 와 도구 설명이 차지합니다. 이 부분은 줄지 않으므로
+          짧게 유지하는 게 중요합니다. 나머지를 대화와 읽은 파일이 채우고, 꽉 차면 압축이 일어납니다.
+        </figcaption>
+      </figure>
+
+      <p>
+        컨텍스트가 차면 <strong>압축(compaction)</strong> 이 일어납니다. 앞부분 대화가 요약본으로
+        치환되고 세부는 사라집니다. "아까 말한 그거"가 갑자기 안 통하는 이유가 이것입니다.
+      </p>
+
+      <div class="note">
+        <b>그래서 나머지 기능이 존재합니다.</b> 스킬은 필요할 때만 로드해서, 서브에이전트는 읽은 원문을
+        따로 두고 결론만 가져와서, <code>/clear</code> 는 아예 비워서 — 전부 이 한 가지 문제를 다룹니다.
+      </div>
+    </section>
+
+    <!-- 02 -->
+    <section id="terms">
+      <div class="sec-head"><span class="n">02</span><h2>용어</h2></div>
+
+      <dl class="terms">
+
+        <div class="term">
+          <dt><span class="ko">세션</span><span class="en">session</span></dt>
+          <dd>
+            <p>Claude 를 켜고 끌 때까지의 한 덩어리. 컨텍스트는 세션 안에서만 유지됩니다.</p>
+            <span class="why"><b>알아둘 것</b> — <code>/clear</code> 로 비우거나, 창을 닫았다가
+            <code>--continue</code> 로 직전 세션을 이어받을 수 있습니다.</span>
+          </dd>
+        </div>
+
+        <div class="term">
+          <dt><span class="ko">도구</span><span class="en">tool</span></dt>
+          <dd>
+            <p>Claude 가 실제로 하는 행동. 파일 읽기·수정, 명령 실행, 검색 등이 전부 도구 호출입니다.
+            대화창에 하나씩 표시됩니다.</p>
+            <span class="why"><b>알아둘 것</b> — 무슨 명령을 왜 돌리는지 보이므로, 이상하면 그 자리에서
+            멈출 수 있습니다.</span>
+          </dd>
+        </div>
+
+        <div class="term">
+          <dt><span class="ko">권한 모드</span><span class="en">permission mode</span></dt>
+          <dd>
+            <p>파일 수정이나 명령 실행 전에 물어볼지 정하는 설정. 기본은 <strong>매번 확인</strong>입니다.
+            익숙해지면 수정은 자동 승인으로 돌려 속도를 올릴 수 있습니다.</p>
+            <span class="why"><b>알아둘 것</b> — 승인 프롬프트는 읽고 누르세요. 삭제·커밋·배포처럼
+            되돌리기 어려운 건 여기서 막는 게 유일한 기회입니다.</span>
+          </dd>
+        </div>
+
+        <div class="term">
+          <dt><span class="ko">플랜 모드</span><span class="en">plan mode</span></dt>
+          <dd>
+            <p>읽기만 하고 고치지 않는 모드. 조사와 계획을 먼저 받아보고, 승인하면 그때 실행합니다.</p>
+            <span class="why"><b>알아둘 것</b> — 큰 작업일수록 이득입니다. 엉뚱한 방향으로 30분 간 뒤
+            되돌리는 것보다 낫습니다.</span>
+          </dd>
+        </div>
+
+        <div class="term">
+          <dt><span class="ko">CLAUDE.md</span><span class="en">project rules</span></dt>
+          <dd>
+            <p>프로젝트 루트에 두는 규칙 파일. <strong>매 대화마다 자동으로 읽힙니다.</strong>
+            "이 프로젝트에선 이렇게 해라" 를 적어두는 곳입니다.</p>
+            <span class="why"><b>알아둘 것</b> — 항상 로드되므로 길면 그만큼 컨텍스트를 먹습니다.
+            절차는 스킬로 빼고, 여기엔 판단 기준만 남기는 게 좋습니다.</span>
+          </dd>
+        </div>
+
+        <div class="term">
+          <dt><span class="ko">스킬</span><span class="en">skill</span></dt>
+          <dd>
+            <p>특정 작업의 절차를 적어둔 문서. <strong>그 작업을 할 때만</strong> 로드됩니다.
+            <code>/스킬명</code> 으로 직접 부를 수도 있습니다.</p>
+            <span class="why"><b>알아둘 것</b> — 설명 한 줄만 항상 떠 있고 본문은 걸릴 때 들어옵니다.
+            그래서 길게 써도 부담이 적습니다.</span>
+          </dd>
+        </div>
+
+        <div class="term">
+          <dt><span class="ko">훅</span><span class="en">hook</span></dt>
+          <dd>
+            <p>특정 시점에 <strong>자동으로 실행되는 명령</strong>. 파일을 저장한 직후, 명령을 실행하기
+            전 같은 지점에 걸어둡니다.</p>
+            <span class="why"><b>알아둘 것</b> — Claude 가 기억해서 하는 게 아니라 시스템이 실행합니다.
+            "매번 잊지 말고 해야 하는 일" 은 부탁보다 훅이 확실합니다.</span>
+          </dd>
+        </div>
+
+        <div class="term">
+          <dt><span class="ko">서브에이전트</span><span class="en">subagent</span></dt>
+          <dd>
+            <p>별도 컨텍스트에서 조사만 하고 <strong>결론만</strong> 돌려주는 보조 Claude.
+            파일 수십 개를 훑어야 하는 질문에 씁니다.</p>
+            <span class="why"><b>알아둘 것</b> — 컨텍스트는 아끼지만 총 토큰은 오히려 늡니다.
+            그리고 요약만 받으므로 <b>수정까지 해야 하는 일에는 쓰지 않습니다.</b></span>
+          </dd>
+        </div>
+
+        <div class="term">
+          <dt><span class="ko">메모리</span><span class="en">memory</span></dt>
+          <dd>
+            <p>세션이 끝나도 남는 기록. 사용자의 지시나 프로젝트 특성 중 오래 갈 것들이 저장됩니다.</p>
+            <span class="why"><b>알아둘 것</b> — "앞으로 이렇게 해줘" 라고 하면 여기 남습니다.
+            바뀌었으면 바뀌었다고 말해주세요.</span>
+          </dd>
+        </div>
+
+        <div class="term">
+          <dt><span class="ko">MCP</span><span class="en">외부 도구 연결</span></dt>
+          <dd>
+            <p>Jira·DB·사내 시스템 같은 외부 도구를 Claude 에 붙이는 규격. 붙이면 그 시스템을 직접
+            조회·조작할 수 있습니다.</p>
+            <span class="why"><b>알아둘 것</b> — 이 프로젝트는 현재 연결된 것이 없습니다.
+            DB 는 MCP 대신 전용 스크립트로 접근합니다.</span>
+          </dd>
+        </div>
+
+      </dl>
+    </section>
+
+    <!-- 03 -->
+    <section id="commands">
+      <div class="sec-head"><span class="n">03</span><h2>자주 쓰는 명령</h2></div>
+
+      <p>입력창에 <code>/</code> 를 치면 목록이 뜹니다. 버전과 실행 환경(터미널 / VS Code)에 따라
+      있는 것과 없는 것이 조금 다릅니다.</p>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th>명령</th><th>하는 일</th><th>언제</th></tr></thead>
+          <tbody>
+            <tr><td class="cmd"><code>/clear</code></td><td>컨텍스트를 비우고 새로 시작</td><td><strong>작업 하나가 끝날 때마다.</strong> 가장 자주 쓰게 됩니다</td></tr>
+            <tr><td class="cmd"><code>/compact</code></td><td>지금까지 대화를 요약본으로 압축</td><td>맥락은 이어가야 하는데 컨텍스트가 찰 때</td></tr>
+            <tr><td class="cmd"><code>/rewind</code></td><td>파일을 이전 상태로 되돌림</td><td>수정이 잘못됐을 때</td></tr>
+            <tr><td class="cmd"><code>/model</code></td><td>모델 변경</td><td>가볍고 빠르게 / 어렵고 정확하게 사이 조절</td></tr>
+            <tr><td class="cmd"><code>/config</code></td><td>테마·모드 등 설정</td><td>처음 한 번</td></tr>
+            <tr><td class="cmd"><code>/hooks</code></td><td>훅 목록 확인·수정</td><td>훅이 안 걸리는 것 같을 때</td></tr>
+            <tr><td class="cmd"><code>/mcp</code></td><td>외부 도구 연결 상태</td><td>MCP 를 쓸 때</td></tr>
+            <tr><td class="cmd"><code>/init</code></td><td>코드베이스를 분석해 <code>CLAUDE.md</code> 생성</td><td>새 프로젝트를 붙일 때</td></tr>
+            <tr><td class="cmd"><code>/cost</code></td><td>사용량 확인</td><td>궁금할 때</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <b>daebonew 전용 명령</b> — <code>/xfdl-write</code>, <code>/screen-check</code>,
+        <code>/java-gv10-diff</code>, <code>/dev-setup</code>. 7번 항목에서 설명합니다.
+      </div>
+    </section>
+
+    <!-- 04 -->
+    <section id="models">
+      <div class="sec-head"><span class="n">04</span><h2>모델과 생각 깊이</h2></div>
+
+      <p>
+        같은 Claude Code 라도 <strong>어떤 모델로 도는지</strong>에 따라 결과와 속도가 달라집니다.
+        <code>/model</code> 로 바꿉니다. 조합이 세 가지 축으로 나뉩니다 — 모델, 생각 깊이, 출력 속도.
+      </p>
+
+      <h3>모델</h3>
+      <div class="tw">
+        <table>
+          <thead><tr><th>모델</th><th>성격</th><th>언제</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="cmd"><strong>Fable 5</strong></td>
+              <td>가장 강력, 가장 느리고 가장 비쌈</td>
+              <td>초고난도 코딩, 장시간 작업, 복잡한 분석</td>
+            </tr>
+            <tr>
+              <td class="cmd"><strong>Opus 5</strong></td>
+              <td>강력, 느리고 비쌈</td>
+              <td>복잡한 원인 분석, 대규모 리팩터링, 설계 판단</td>
+            </tr>
+            <tr>
+              <td class="cmd"><strong>Sonnet 5</strong></td>
+              <td>균형</td>
+              <td>일상 작업 대부분 — 화면 수정, 소규모 기능</td>
+            </tr>
+            <tr>
+              <td class="cmd"><strong>Haiku 4.5</strong></td>
+              <td>가볍고 빠름</td>
+              <td>단순·반복 작업, 대량 처리</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <b>모델 이름 뒤의 <code>[1m]</code></b> — 컨텍스트 창을 100만 토큰으로 늘린 변형입니다.
+        1번 항목의 "작업 기억"이 그만큼 커져 압축이 훨씬 늦게 옵니다. 큰 파일을 여럿 다룰 때 유리합니다.
+      </div>
+
+      <h3>생각 깊이 <span class="en-inline">effort</span></h3>
+      <p>
+        답하기 전에 얼마나 오래 따져볼지입니다. <code>low</code> · <code>medium</code> ·
+        <code>high</code> · <code>xhigh</code> 네 단계가 있고, 올릴수록 정확해지지만 느려집니다.
+        어려운 디버깅이나 설계에서는 <code>high</code> 이상이 체감됩니다.
+      </p>
+
+      <h3>Fast mode <code>/fast</code></h3>
+      <p>
+        <strong>가장 흔한 오해가 여기 있습니다.</strong> Fast mode 는 작은 모델로 낮추는 게
+        <strong>아닙니다.</strong> Opus 를 그대로 쓰되 출력만 빠르게 하는 것입니다. 품질을 포기하지
+        않고 속도를 얻습니다. Opus 5 / 4.8 에서 쓸 수 있습니다.
+      </p>
+
+      <div class="note">
+        <b>실전 감각</b> — 대부분은 Sonnet 으로 충분합니다. "몇 번 시켰는데 계속 헛짚는다" 싶으면
+        모델을 올리거나 생각 깊이를 올려보세요. 반대로 단순 반복인데 느리다면 낮추면 됩니다.
+        <code>/model</code> 은 <b>대화 중에도 바꿀 수 있습니다.</b>
+      </div>
+    </section>
+
+    <!-- 05 -->
+    <section id="habits">
+      <div class="sec-head"><span class="n">05</span><h2>실무 습관 여섯</h2></div>
+
+      <div class="habits">
+        <div class="habit">
+          <span class="tag">컨텍스트</span>
+          <h3>작업이 끝나면 <code>/clear</code></h3>
+          <p>화면 하나 고치고 다음 작업으로 넘어갈 때 비우세요. 앞 작업의 파일이 계속 남아 있으면
+          압축이 빨리 오고, 엉뚱한 앞 맥락에 끌려가기도 합니다.</p>
+        </div>
+
+        <div class="habit">
+          <span class="tag">방향</span>
+          <h3>큰 작업은 계획부터 받으세요</h3>
+          <p>"이거 어떻게 할 건지 먼저 말해줘" 한마디면 됩니다. 코드를 다 짜놓고 방향이 틀린 걸
+          발견하는 것보다 훨씬 쌉니다.</p>
+        </div>
+
+        <div class="habit">
+          <span class="tag">안전</span>
+          <h3>승인 프롬프트를 읽으세요</h3>
+          <p>특히 삭제·커밋·배포·DB 쓰기. 되돌리기 어려운 일을 막을 수 있는 지점이 거기 하나뿐입니다.
+          습관적으로 엔터를 치지 마세요.</p>
+        </div>
+
+        <div class="habit">
+          <span class="tag">검증</span>
+          <h3>"다 됐습니다" 를 그대로 믿지 마세요</h3>
+          <p>테스트를 돌렸는지, 무엇으로 확인했는지 근거를 보세요. 근거 없이 완료라고 하면
+          "어떻게 확인했어?" 라고 되물으면 됩니다.</p>
+        </div>
+
+        <div class="habit">
+          <span class="tag">구체성</span>
+          <h3>파일·화면 이름을 같이 주세요</h3>
+          <p>"그 화면 안 떠" 보다 "<code>DHB_REQ2DETAIL</code> 이 안 떠, 로그는 이거" 가 훨씬 빠릅니다.
+          찾는 데 쓰는 컨텍스트가 줄고 오답도 줄어듭니다.</p>
+        </div>
+
+        <div class="habit">
+          <span class="tag">기록</span>
+          <h3>반복될 지시는 규칙으로 남기세요</h3>
+          <p>같은 말을 두 번 이상 하고 있다면 "앞으로 항상 이렇게 해줘" 라고 말해주세요.
+          <code>CLAUDE.md</code> 나 메모리에 남아 다음 세션에도 적용됩니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 -->
+    <section id="cannot">
+      <div class="sec-head"><span class="n">06</span><h2>Claude 가 못 하는 것</h2></div>
+
+      <p>기대치를 미리 맞춰두면 "왜 안 해주지" 로 시간 버릴 일이 없습니다.</p>
+
+      <div class="callout">
+        <div class="hd"><span class="mk">불가</span>사람이 직접 해야 하는 것</div>
+        <ol>
+          <li><b>VS Code 화면 조작</b> — <code>Java: Reload Projects</code> 같은 명령 팔레트 실행,
+          버튼 클릭. 파일은 고칠 수 있지만 UI 는 누를 수 없습니다.</li>
+          <li><b>프로그램 설치</b> — 사내 표준 배포본이 따로 있는 경우가 많아, 이 프로젝트에서는
+          <strong>안내만 하고 설치는 하지 않도록</strong> 규칙을 정해뒀습니다.</li>
+          <li><b>계정·비밀번호</b> — SVN 로그인, 라이선스 등록 같은 자격증명은 본인 것입니다.</li>
+          <li><b>화면을 눈으로 보는 것</b> — 렌더링 결과는 모릅니다. 다만
+          <strong>스크린샷을 붙여넣으면 읽을 수 있습니다.</strong></li>
+        </ol>
+      </div>
+
+      <p>
+        반대로 <strong>로그·에러 메시지는 통째로 붙여넣는 게 가장 효율적입니다.</strong>
+        요약해서 전달하면 정작 원인이 담긴 줄이 빠지는 경우가 많습니다.
+      </p>
+    </section>
+
+    <!-- 07 -->
+    <section id="project">
+      <div class="sec-head"><span class="n">07</span><h2>daebonew 에서 추가로 알 것</h2></div>
+
+      <h3>스킬 네 가지</h3>
+      <div class="tw">
+        <table>
+          <thead><tr><th>스킬</th><th>언제 걸리나</th></tr></thead>
+          <tbody>
+            <tr><td class="cmd"><code>/xfdl-write</code></td><td><code>.xfdl</code> 신규·수정 — 패턴 선택, 공통 골격, DB 등록이 필요해지는 변경</td></tr>
+            <tr><td class="cmd"><code>/screen-check</code></td><td>화면 등록 상태 점검 — 화면이 안 열리거나 그리드가 비어 보일 때</td></tr>
+            <tr><td class="cmd"><code>/java-gv10-diff</code></td><td><code>.java</code> 수정 — gv10 동일 파일과 대조</td></tr>
+            <tr><td class="cmd"><code>/dev-setup</code></td><td>개발환경 세팅 — 점검하고 남은 할 일을 알려줌</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">직접 부르지 않아도 해당 작업을 시작하면 자동으로 걸립니다.</p>
+
+      <h3>자동으로 도는 것 — 시키지 않아도 됩니다</h3>
+      <ul class="plain">
+        <li><b><code>.xfdl</code> 저장 → <code>.xfdl.js</code> 생성</b> —
+        <code>src/main/webapp/</code> 에 산출물이 자동으로 만들어집니다. 원본만 고치면 화면이
+        안 바뀌는 함정을 훅이 막아줍니다.</li>
+        <li><b>신규 화면 감지</b> — SVN 미등록 <code>.xfdl</code> 이면 DB 등록 점검을 하겠냐고 물어봅니다.</li>
+        <li><b><code>.claude/INDEX.md</code> 갱신</b> — Claude 관련 파일이 늘면 목록이 자동으로 맞춰집니다.</li>
+      </ul>
+
+      <h3>안전장치</h3>
+      <ul class="plain">
+        <li><b>DB 는 전용 스크립트로만</b> — 기본 읽기 전용이고, 접속 대상이
+        <code>application.properties</code> 와 다르면 아예 붙지 않습니다. 운영 서버는 차단입니다.</li>
+        <li><b><code>sqlcmd</code> 직접 호출 차단</b> — 위 가드를 우회하기 때문입니다.</li>
+        <li><b>계정·비밀번호는 출력하지 않습니다</b> — 복호화한 값은 실행 중 메모리에만 둡니다.</li>
+      </ul>
+
+      <div class="callout">
+        <div class="hd"><span class="mk">주의</span>커밋하면 안 되는 파일</div>
+        <ol>
+          <li><code>.classpath</code>, <code>.project</code>, <code>.settings/</code> —
+          STS 와 VS Code 가 번갈아 덮어쓰는데, 안에 <b>Windows 사용자명과 확장 버전번호가 박힌
+          절대경로</b>가 들어갑니다. 커밋하면 다른 사람 전원의 Gradle 동기화가 깨집니다.</li>
+          <li><code>CLAUDE.md</code>, <code>.claude/</code> — svn 무시 대상으로 이미 등록해뒀습니다
+          (r91886). <code>svn update</code> 만 하면 자동 적용됩니다.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 08 -->
+    <section id="windows">
+      <div class="sec-head"><span class="n">08</span><h2>Windows 함정</h2></div>
+
+      <p>이 프로젝트에서 실제로 겪은 것들입니다. 알아두면 원인을 빨리 찾습니다.</p>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th>증상</th><th>원인 / 대응</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><code>.ps1</code> 이 실행되지 않음</td>
+              <td>실행 정책이 <code>Restricted</code>. <code>powershell -ExecutionPolicy Bypass -File …</code> 로 실행하거나, <code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code> 를 한 번 설정</td>
+            </tr>
+            <tr>
+              <td>압축본에서 푼 <code>.ps1</code> 이 계속 막힘</td>
+              <td>인터넷에서 받은 파일 표시(MOTW). 압축 파일 <b>속성 → 차단 해제</b> 후 풀거나 <code>Unblock-File</code></td>
+            </tr>
+            <tr>
+              <td>파일을 고쳤더니 전체가 변경으로 잡힘</td>
+              <td>줄바꿈이 CRLF → LF 로 바뀐 것. 대부분의 소스가 CRLF 라 <code>sed -i</code> 같은 도구가 통째로 바꿔버립니다</td>
+            </tr>
+            <tr>
+              <td>한글이 <code>???</code> 로 깨짐</td>
+              <td>콘솔 코드페이지(CP949) 문제. 파일 자체는 멀쩡한 경우가 많습니다</td>
+            </tr>
+            <tr>
+              <td>화면은 뜨는데 그리드가 비어 있음</td>
+              <td>정상입니다. 그리드 컬럼은 <code>.xfdl</code> 이 아니라 DB 에서 옵니다</td>
+            </tr>
+            <tr>
+              <td>화면이 아무 반응 없이 안 열림</td>
+              <td>DB 미등록. <b>에러도 로그도 안 남습니다.</b> <code>/screen-check</code> 로 확인</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <b>PowerShell 과 Bash 를 섞어 쓰는 환경입니다.</b> 두 셸은 문법이 달라서, 한쪽 문법을
+        다른 쪽에 넣으면 <b>에러가 나는 게 아니라 조용히 다른 일을 합니다.</b>
+        명령을 복사해 쓸 때 어느 셸용인지 확인하세요.
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>
+      더 자세한 내용은 저장소 안에 있습니다 — 파일 목록과 용도는 <code>.claude/INDEX.md</code>,
+      환경 세팅 절차는 <code>.claude/project/daebonew/dev-setup-guide.md</code>,
+      화면 작성 규약은 <code>.claude/docs/nexacro-screen-conventions.md</code>.
+    </p>
+  </div>
+</footer>
